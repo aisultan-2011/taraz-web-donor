@@ -84,24 +84,24 @@
                             <option value="">Ауданды немесе мөлтек ауданды таңдаңыз...</option>
                             <option value="Орталық (Центр)">Орталық (Центр)</option>
                             <option value="Қарасу алқабы">Қарасу алқабы</option>
-                            <option value="Бурыл">Бурыл</option>
+                            <option value="Бурыл">Бурыл</option> 
                             <option value="Тектұрмас">Тектұрмас</option>
-                            <option value="Қант зауыты">Қант зауыты (Кантзавод)</option>
+                            <option value="Қант зауыты">Қант зауыты (Сах.завод)</option>
                             <option value="Кирпичный">Кирпичный</option>
                             <option value="1-мөлтек аудан">1-мөлтек аудан (Акбулак)</option>
                             <option value="2-мөлтек аудан">2-мөлтек аудан (Каратау)</option>
                             <option value="3-мөлтек аудан">3-мөлтек аудан (Жайлау)</option>
                             <option value="4-мөлтек аудан">4-мөлтек аудан (Салтанат)</option>
                             <option value="5-мөлтек аудан">5-мөлтек аудан (Қарасу)</option>
-                            <option value="6-мөлтек аудан">6-мөлтек аудан (Талас)</option>
-                            <option value="7-мөлтек аудан">7-мөлтек аудан (Самал)</option>
+                            <option value="6-мөлтек аудан">6-мөлтек аудан (Талас)</option> 
+                            <option value="7-мөлтек аудан">7-мөлтек аудан (Самал)</option> 
                             <option value="8-мөлтек аудан">8-мөлтек аудан (Алатау)</option>
                             <option value="9-мөлтек аудан">9-мөлтек аудан (Мыңбұлақ)</option>
-                            <option value="10-мөлтек аудан">10-мөлтек аудан (Аса)</option>
+                            <option value="10-мөлтек аудан">10-мөлтек аудан (Аса)</option> 
                             <option value="11-мөлтек аудан">11-мөлтек аудан (Жансая)</option>
                             <option value="12-мөлтек аудан">12-мөлтек аудан (Астана)</option>
                             <option value="13-мөлтек аудан">13-мөлтек аудан (Бәйтерек)</option>
-                            <option value="14-мөлтек аудан">14-мөлтек аудан (Балауса)</option>
+                            <option value="14-мөлтек аудан">14-мөлтек аудан (Балауса)</option> 
                             <option value="15-мөлтек аудан">15-мөлтек аудан (Алатау)</option>
                             <option value="Басқа аумақ">Басқа аумақ</option>
                         </select>
@@ -134,7 +134,7 @@
                     </div>
                 </div>
 
-                <button type="submit" 
+                <button type="submit" id="submitBtn"
                     class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition duration-200">
                     <i class="fa-solid fa-paper-plane mr-2"></i> Донор Базасына Тіркелу
                 </button>
@@ -149,7 +149,7 @@
                     <h2 class="text-xl font-bold text-gray-900">
                         <i class="fa-solid fa-hospital-user text-red-600"></i> Қызыл Жарты Ай — Админ Панелі
                     </h2>
-                    <p class="text-xs text-gray-500">Тараз қаласының тіркелген шұғыл донорлар базасы</p>
+                    <p class="text-xs text-gray-500">Тараз қаласының тіркелген шұғыл донорлар базасы (Google Sheets Синхроны)</p>
                 </div>
                 
                 <div class="mt-4 md:mt-0 flex gap-2">
@@ -165,6 +165,9 @@
                         <option value="+">Оң (+)</option>
                         <option value="-">ТЕРІС (-)</option>
                     </select>
+                    <button onclick="fetchDonorsFromGoogle()" class="bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg text-sm font-semibold">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
                 </div>
             </div>
 
@@ -176,10 +179,11 @@
                             <th class="p-3">Қан тобы</th>
                             <th class="p-3">Аудан</th>
                             <th class="p-3">Телефон</th>
-                            <th class="p-3">Статус</th>
+                            <th class="p-3">Соңғы қан тапсыруы</th>
                         </tr>
                     </thead>
                     <tbody id="donorTableBody">
+                        <tr><td colspan="5" class="text-center p-4 text-gray-400">Жүктелуде...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -188,18 +192,41 @@
     </div>
 
     <script>
-        let donors = JSON.parse(localStorage.getItem('taraz_donors')) || [];
+        // СЕНІҢ GOOGLE APPS SCRIPT СІЛТЕМЕҢ
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwD_QTyz5SBVwT1gxebq-OSG3bjJHJF2JyZVe01vwiaqBP7qgJVs4qj_PS_D5WRCfvxbA/exec";
 
-        function registerDonor(e) {
+        let donors = [];
+
+        // Google Таблицадан мәліметтерді жүктеп алу
+        async function fetchDonorsFromGoogle() {
+            const tableBody = document.getElementById('donorTableBody');
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-4 text-gray-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Мәліметтер бұлтты базадан жүктелуде...</td></tr>`;
+
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL);
+                const data = await res.json();
+                donors = data;
+                renderDonors();
+            } catch (err) {
+                console.error(err);
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-4 text-red-500">Мәліметтерді жүктеу қатесі. Қайталап көріңіз.</td></tr>`;
+            }
+        }
+
+        async function registerDonor(e) {
             e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Жіберілуде...`;
 
             const fullName = document.getElementById('fullName').value;
             const phone = document.getElementById('phone').value;
-            const age = parseInt(document.getElementById('age').value);
+            const age = document.getElementById('age').value;
             const bloodGroup = document.getElementById('bloodGroup').value;
             const rhFactor = document.getElementById('rhFactor').value;
             const district = document.getElementById('district').value;
-            const lastDonation = document.getElementById('lastDonation').value;
+            const lastDonation = document.getElementById('lastDonation').value || "Бұрын тапсырмаған";
 
             const chronicDiseases = document.getElementById('chronicDiseases').checked;
             const recentTattoo = document.getElementById('recentTattoo').checked;
@@ -207,41 +234,38 @@
 
             if (!chronicDiseases || !recentTattoo || !recentFlu) {
                 alert("Кешіріңіз! Медициналық шектеулерге байланысты сіз қазіргі уақытта донор бола алмайсыз.");
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Донор Базасына Тіркелу`;
                 return;
             }
 
-            let isReady = true;
-            let statusText = "Дайын 🟢";
-
-            if (lastDonation) {
-                const lastDate = new Date(lastDonation);
-                const today = new Date();
-                const diffDays = Math.ceil((today - lastDate) / (1000 * 60 * 60 * 24));
-                
-                if (diffDays < 60) {
-                    isReady = false;
-                    statusText = `Күтуде (${60 - diffDays} күн қалды) 🟡`;
-                }
-            }
-
-            const newDonor = {
-                id: Date.now(),
-                fullName,
-                phone,
-                age,
-                bloodGroup,
-                rhFactor,
-                district,
-                statusText,
-                isReady
+            const donorData = {
+                fullName: fullName,
+                phone: phone,
+                age: age,
+                bloodGroup: bloodGroup,
+                rhesus: rhFactor,
+                address: district,
+                lastDonationDate: lastDonation
             };
 
-            donors.push(newDonor);
-            localStorage.setItem('taraz_donors', JSON.stringify(donors));
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(donorData)
+                });
 
-            alert("Құттықтаймыз! Сіз Тараз донорлар базасына сәтті тіркелдіңіз!");
-            document.getElementById('donorForm').reset();
-            renderDonors();
+                alert("Құттықтаймыз! Сіз Тараз донорлар базасына сәтті тіркелдіңіз!");
+                document.getElementById('donorForm').reset();
+                setTimeout(() => { fetchDonorsFromGoogle(); }, 1500);
+            } catch (err) {
+                alert("Қате орын алды! Қайталап көріңіз.");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Донор Базасына Тіркелу`;
+            }
         }
 
         function renderDonors() {
@@ -253,7 +277,7 @@
 
             const filtered = donors.filter(d => {
                 const matchBlood = (filterBlood === "ALL" || d.bloodGroup === filterBlood);
-                const matchRh = (filterRh === "ALL" || d.rhFactor === filterRh);
+                const matchRh = (filterRh === "ALL" || d.rhesus === filterRh);
                 return matchBlood && matchRh;
             });
 
@@ -266,17 +290,18 @@
                 const row = `
                     <tr class="border-b hover:bg-gray-50">
                         <td class="p-3 font-semibold text-gray-900">${d.fullName} (${d.age} жас)</td>
-                        <td class="p-3"><span class="bg-red-100 text-red-800 font-bold px-2.5 py-1 rounded-full">${d.bloodGroup} (${d.rhFactor})</span></td>
-                        <td class="p-3">${d.district}</td>
+                        <td class="p-3"><span class="bg-red-100 text-red-800 font-bold px-2.5 py-1 rounded-full">${d.bloodGroup} (${d.rhesus})</span></td>
+                        <td class="p-3">${d.address}</td>
                         <td class="p-3"><a href="https://wa.me/${d.phone.replace(/[^0-9]/g, '')}" target="_blank" class="text-green-600 font-bold hover:underline"><i class="fa-brands fa-whatsapp"></i> ${d.phone}</a></td>
-                        <td class="p-3 text-xs font-bold">${d.statusText}</td>
+                        <td class="p-3 text-xs font-medium text-gray-600">${d.lastDonationDate}</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
             });
         }
 
-        renderDonors();
+        // Бет жүктелгенде Google-дан мәліметтерді алып келу
+        fetchDonorsFromGoogle();
     </script>
 </body>
 </html>
