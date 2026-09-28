@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taraz Donor Med - Қызыл Жарты Ай Донорлар Платформасы</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <!-- Навигация -->
+    <nav class="bg-red-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid font-bold text-2xl fa-hand-holding-medical"></i>
+                <span class="font-bold text-xl tracking-wide">Taraz Donor Med</span>
+            </div>
+            <span class="text-xs bg-red-800 px-3 py-1 rounded-full text-red-100 font-medium">
+                Қызыл Жарты Ай (Тараз филиалы)
+            </span>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Шұғыл Донорлық Жүйесі</h1>
+            <p class="text-gray-600">Өмірге үміт сыйлаңыз! Тараз қалалық донорлар базасына тіркеліңіз.</p>
+        </div>
+
+        <!-- АНКЕТА -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-10 border border-gray-100">
+            <h2 class="text-xl font-bold text-red-600 mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-user-plus"></i> Донор Анкетасы
+            </h2>
+
+            <form id="donorForm" onsubmit="registerDonor(event)" class="space-y-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Толық аты-жөніңіз *</label>
+                        <input type="text" id="fullName" required placeholder="Мысалы: Серіков Арман" 
+                            class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Телефон нөмірі (WhatsApp) *</label>
+                        <input type="tel" id="phone" required placeholder="+7 (707) 000-00-00" 
+                            class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Жасыңыз *</label>
+                        <input type="number" id="age" min="18" max="65" required placeholder="18-65 жас" 
+                            class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Қан тобы *</label>
+                        <select id="bloodGroup" required class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                            <option value="">Таңдаңыз...</option>
+                            <option value="I">I (О)</option>
+                            <option value="II">II (A)</option>
+                            <option value="III">III (B)</option>
+                            <option value="IV">IV (AB)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Резус-фактор *</label>
+                        <select id="rhFactor" required class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                            <option value="">Таңдаңыз...</option>
+                            <option value="+">Оң (+)</option>
+                            <option value="-">ТЕРІС (-)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- НАҚТЫ АУДАНДАР ТІЗІМІ -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Тараз қаласындағы ауданыңыз *</label>
+                        <select id="district" required class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                            <option value="">Ауданды немесе мөлтек ауданды таңдаңыз...</option>
+                            <option value="Орталық (Центр)">Орталық (Центр)</option>
+                            <option value="Қарасу алқабы">Қарасу алқабы</option>
+                            <option value="Бурыл">Бурыл</option>
+                            <option value="Тектұрмас">Тектұрмас</option>
+                            <option value="Қант зауыты">Қант зауыты (Кантзавод)</option>
+                            <option value="Кирпичный">Кирпичный</option>
+                            <option value="1-мөлтек аудан">1-мөлтек аудан (Акбулак)</option>
+                            <option value="2-мөлтек аудан">2-мөлтек аудан (Каратау)</option>
+                            <option value="3-мөлтек аудан">3-мөлтек аудан (Жайлау)</option>
+                            <option value="4-мөлтек аудан">4-мөлтек аудан (Салтанат)</option>
+                            <option value="5-мөлтек аудан">5-мөлтек аудан (Қарасу)</option>
+                            <option value="6-мөлтек аудан">6-мөлтек аудан (Талас)</option>
+                            <option value="7-мөлтек аудан">7-мөлтек аудан (Самал)</option>
+                            <option value="8-мөлтек аудан">8-мөлтек аудан (Алатау)</option>
+                            <option value="9-мөлтек аудан">9-мөлтек аудан (Мыңбұлақ)</option>
+                            <option value="10-мөлтек аудан">10-мөлтек аудан (Аса)</option>
+                            <option value="11-мөлтек аудан">11-мөлтек аудан (Жансая)</option>
+                            <option value="12-мөлтек аудан">12-мөлтек аудан (Астана)</option>
+                            <option value="13-мөлтек аудан">13-мөлтек аудан (Бәйтерек)</option>
+                            <option value="14-мөлтек аудан">14-мөлтек аудан (Балауса)</option>
+                            <option value="15-мөлтек аудан">15-мөлтек аудан (Алатау)</option>
+                            <option value="Басқа аумақ">Басқа аумақ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Соңғы рет қашан қан тапсырдыңыз?</label>
+                        <input type="date" id="lastDonation" 
+                            class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                        <span class="text-xs text-gray-500">Бұрын тапсырмаған болсаңыз, бос қалдырыңыз.</span>
+                    </div>
+                </div>
+
+                <div class="border-t pt-4">
+                    <h3 class="text-md font-bold text-gray-800 mb-3 text-red-600">
+                        <i class="fa-solid fa-notes-medical"></i> Медициналық шектеулер:
+                    </h3>
+                    <div class="space-y-2 text-sm text-gray-700">
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" id="chronicDiseases" class="w-4 h-4 text-red-600 rounded">
+                            <span>Созылмалы ауруларым жоқ (Гепатит, ВИЧ, Туберкулез)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" id="recentTattoo" class="w-4 h-4 text-red-600 rounded">
+                            <span>Соңғы 6 айда татуировка/пирсинг жасалмаған</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" id="recentFlu" class="w-4 h-4 text-red-600 rounded">
+                            <span>Соңғы 14 күнде тұмаумен ауырмадым</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition duration-200">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> Донор Базасына Тіркелу
+                </button>
+
+            </form>
+        </div>
+
+        <!-- АДМИН ПАНЕЛЬ -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">
+                        <i class="fa-solid fa-hospital-user text-red-600"></i> Қызыл Жарты Ай — Админ Панелі
+                    </h2>
+                    <p class="text-xs text-gray-500">Тараз қаласының тіркелген шұғыл донорлар базасы</p>
+                </div>
+                
+                <div class="mt-4 md:mt-0 flex gap-2">
+                    <select id="filterBlood" onchange="renderDonors()" class="px-3 py-1.5 border rounded-lg text-sm">
+                        <option value="ALL">Барлық қан тобы</option>
+                        <option value="I">I (О)</option>
+                        <option value="II">II (A)</option>
+                        <option value="III">III (B)</option>
+                        <option value="IV">IV (AB)</option>
+                    </select>
+                    <select id="filterRh" onchange="renderDonors()" class="px-3 py-1.5 border rounded-lg text-sm">
+                        <option value="ALL">Барлық Резус</option>
+                        <option value="+">Оң (+)</option>
+                        <option value="-">ТЕРІС (-)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-gray-600">
+                    <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+                        <tr>
+                            <th class="p-3">Аты-жөні</th>
+                            <th class="p-3">Қан тобы</th>
+                            <th class="p-3">Аудан</th>
+                            <th class="p-3">Телефон</th>
+                            <th class="p-3">Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="donorTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let donors = JSON.parse(localStorage.getItem('taraz_donors')) || [];
+
+        function registerDonor(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const age = parseInt(document.getElementById('age').value);
+            const bloodGroup = document.getElementById('bloodGroup').value;
+            const rhFactor = document.getElementById('rhFactor').value;
+            const district = document.getElementById('district').value;
+            const lastDonation = document.getElementById('lastDonation').value;
+
+            const chronicDiseases = document.getElementById('chronicDiseases').checked;
+            const recentTattoo = document.getElementById('recentTattoo').checked;
+            const recentFlu = document.getElementById('recentFlu').checked;
+
+            if (!chronicDiseases || !recentTattoo || !recentFlu) {
+                alert("Кешіріңіз! Медициналық шектеулерге байланысты сіз қазіргі уақытта донор бола алмайсыз.");
+                return;
+            }
+
+            let isReady = true;
+            let statusText = "Дайын 🟢";
+
+            if (lastDonation) {
+                const lastDate = new Date(lastDonation);
+                const today = new Date();
+                const diffDays = Math.ceil((today - lastDate) / (1000 * 60 * 60 * 24));
+                
+                if (diffDays < 60) {
+                    isReady = false;
+                    statusText = `Күтуде (${60 - diffDays} күн қалды) 🟡`;
+                }
+            }
+
+            const newDonor = {
+                id: Date.now(),
+                fullName,
+                phone,
+                age,
+                bloodGroup,
+                rhFactor,
+                district,
+                statusText,
+                isReady
+            };
+
+            donors.push(newDonor);
+            localStorage.setItem('taraz_donors', JSON.stringify(donors));
+
+            alert("Құттықтаймыз! Сіз Тараз донорлар базасына сәтті тіркелдіңіз!");
+            document.getElementById('donorForm').reset();
+            renderDonors();
+        }
+
+        function renderDonors() {
+            const tableBody = document.getElementById('donorTableBody');
+            const filterBlood = document.getElementById('filterBlood').value;
+            const filterRh = document.getElementById('filterRh').value;
+
+            tableBody.innerHTML = "";
+
+            const filtered = donors.filter(d => {
+                const matchBlood = (filterBlood === "ALL" || d.bloodGroup === filterBlood);
+                const matchRh = (filterRh === "ALL" || d.rhFactor === filterRh);
+                return matchBlood && matchRh;
+            });
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-4 text-gray-400">Донорлар табылмады</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(d => {
+                const row = `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="p-3 font-semibold text-gray-900">${d.fullName} (${d.age} жас)</td>
+                        <td class="p-3"><span class="bg-red-100 text-red-800 font-bold px-2.5 py-1 rounded-full">${d.bloodGroup} (${d.rhFactor})</span></td>
+                        <td class="p-3">${d.district}</td>
+                        <td class="p-3"><a href="https://wa.me/${d.phone.replace(/[^0-9]/g, '')}" target="_blank" class="text-green-600 font-bold hover:underline"><i class="fa-brands fa-whatsapp"></i> ${d.phone}</a></td>
+                        <td class="p-3 text-xs font-bold">${d.statusText}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        renderDonors();
+    </script>
+</body>
+</html>
